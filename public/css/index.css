@@ -10,8 +10,8 @@
     margin-top: 20px;
 }
 img {
-    width: 328px;
-    height: 287px;
+    width: 240px;
+    height: 280px;
     display: block;
     margin-bottom: 20px;
 }
@@ -21,6 +21,7 @@ hr {
 }
 h3 {
     display: inline-block;
+    margin: initial;
 }
 #container {
     display: none;
@@ -32,7 +33,7 @@ h3 {
     height: 32px;
 }
 #container-edit hr {
-    margin: 25px 0;
+    margin: 15px 0;
 }
 #container-edit input {
     width: 195px;
