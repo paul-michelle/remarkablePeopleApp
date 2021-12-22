@@ -1,9 +1,26 @@
 <header>
-    <title>Node Mongo Docker</title>
+    <title>Remarkable People</title>
 </header>
 
 <body>
-    <h1>
-        Greetings!
-    </h1>
+    <div class="container id='container">
+        <h1>Profile</h1>
+        <img src="miscellaneous/Yury_Knozorov.jpg" alt="awesome_photo_here">
+        <span>Name</span><h3 id="name">Yury Knorozov</h3>
+        <span>Country</span> <h3 id="county">Ukraine, Russia</h3>
+        <span>Domain</span><h3 id="domain">History</h3>
+        <span>Achievements</span><h3>First ever to decipher Maya hieroglyphs.</h3>
+        <button class="button" onclick="editProfile()">Edit Profile</button>
+    </div>
+
+    <div class="container id='container-edit">
+        <h1>Profile</h1>
+        <img src="miscellaneous/Yury_Knozorov.jpg" alt="awesome_photo_here">
+        <span>Name</span><label for="input-name"></label><input type="text" id="input-name", value='' /> 
+        <span>Country</span> <label for="input-country"></label><input type="text" id="input-country", value='' /> 
+        <span>Domain</span><label for="input-domain"></label><input type="text" id="input-domain", value='' /> 
+        <span>Achievements</span><label for="input-achievement"></label><input type="text" id="input-achievement", value='' /> 
+        <button class="button" onclick="handleInsertUpdateRequest()">Update or Add</button>
+    </div>
+
 </body>

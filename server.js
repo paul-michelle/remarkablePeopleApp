@@ -32,12 +32,12 @@ app.get(
     '/profile',
     (req, res) => {
         let response = {};
-
+        const nameOfRemarkablePerson = req.query.name;
         MongoClient.connect(MONGO_URI_LOCAL, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
 
             const db = client.db(MONGO_DB_NAME);
-            let query = {userID: 1};
+            let query = {name: nameOfRemarkablePerson};
 
             db.collection(MONGO_USERS_COLLECTION).findOne(query, (queryExeError, queryResult) => {
                 if (queryExeError) throw queryExeError;
@@ -57,9 +57,9 @@ app.post(
         
         response = MongoClient.connect(MONGO_URI_LOCAL, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
-
+            const nameOfRemarkablePerson = req.query.name;
             const db = client.db(MONGO_DB_NAME);
-            let queryMatch = {userID: 1};
+            let queryMatch = {name: nameOfRemarkablePerson};
             let querySet = {$set: userJsonInfo};
             const updateOptions = {upsert: true};
 
