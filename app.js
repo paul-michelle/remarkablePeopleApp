@@ -20,11 +20,15 @@ app.use(
 app.use(
     bodyParser.json()
 );
+app.use(
+    express.static(path.join(__dirname, '/public'))
+);
 
 app.get(
     '/',
     function (req, res) {
-        res.sendFile(path.join(__dirname, 'index.html'));
+        res.sendFile(path.join(__dirname, 'view/index.html'));
+        console.log(__dirname);
     }
 );
 
@@ -75,7 +79,6 @@ app.post(
         }); 
     }
 );
-
 app.listen(
     APP_PORT,
     () => {console.log(`Server is listening on port ${APP_PORT}`)}
