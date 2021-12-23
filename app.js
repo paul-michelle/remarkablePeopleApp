@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const path = require('path');
 const fileSys = require('fs');
-const { stringify } = require('querystring');
 
 const APP_PORT = 3000;
 const MONGO_URI_LOCAL = process.env.MONGO_URI_LOCAL;
@@ -19,70 +18,87 @@ let app = express();
 
 const crossOrigin = cors();
 app.use(crossOrigin);
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.get(
     '/',
-    function (req, res) {
+    (req, res) => {
         res.sendFile(path.join(__dirname, 'view/index.html'));
+    }
+);
+
+app.get(
+    '/profile/all',
+    (req, res) => {
+        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+            if (connectionError) throw connectionError;
+
+            const queryFindAll = {};
+
+            client
+                .db(MONGO_DB_NAME)
+                .collection(MONGO_USERS_COLLECTION)
+                .find(queryFindAll)
+                .toArray(
+                    (queryExeError, queryResult) => {
+                        if (queryExeError) throw queryExeError;
+                        client.close();
+                        res.send(queryResult);
+                    }
+                )
+        });
     }
 );
 
 app.get(
     '/profile',
     (req, res) => {
-        let response = {};
-        const nameOfRemarkablePerson = req.query.name;
-        MongoClient.connect(MONGO_URI_LOCAL, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
 
-            const db = client.db(MONGO_DB_NAME);
-            let query = {name: nameOfRemarkablePerson};
+            const queryFind = { name: req.query.name };
 
-            db.collection(MONGO_USERS_COLLECTION).findOne(query, (queryExeError, queryResult) => {
-                if (queryExeError) throw queryExeError;
-                response = queryResult;
-                client.close();
-                res.send(response);
-            });    
-        }); 
+            client
+                .db(MONGO_DB_NAME)
+                .collection(MONGO_USERS_COLLECTION)
+                .findOne(
+                    queryFind, (queryExeError, queryResult) => {
+                        if (queryExeError) throw queryExeError;
+                        client.close();
+                        res.send(queryResult);
+                    });
+        });
     }
 );
 
 app.post(
     '/profile',
     (req, res) => {
-        let exeResult = {}
-        const userJsonInfo = req.body;
-        
-        console.log(`Received from front-end: ${stringify(userJsonInfo)}`);
-        console.log(`Received query name: ${req.query.name}`);
-
-        MongoClient.connect(MONGO_URI_LOCAL, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
             const nameOfRemarkablePerson = req.query.name;
 
-            let queryMatch = {name: nameOfRemarkablePerson};
-            let querySet = {$set: userJsonInfo};
-            const updateOptions = {upsert: true};
+            const queryMatch = { name: req.body.name };
+            const querySet = { $set: req.body };
+            const updateOptions = { upsert: true };
 
-            const db = client.db(MONGO_DB_NAME);
-            db.collection(MONGO_USERS_COLLECTION).updateOne(
-                queryMatch, querySet, updateOptions, (updateExeError, updateResult) => {
-                    if (updateExeError) throw updateExeError;
-                    
-                    exeResult = updateResult;
-                    console.log(exeResult);
-                    client.close();
-                    res.send(userJsonInfo);
-                }
-            )      
-        }); 
+            client
+                .db(MONGO_DB_NAME)
+                .collection(MONGO_USERS_COLLECTION)
+                .updateOne(
+                    queryMatch, querySet, updateOptions, (updateExeError, updateResult) => {
+                        if (updateExeError) throw updateExeError;
+                        client.close();
+                        res.send(req.body);
+                    }
+                )
+        });
     }
 );
+
 app.listen(
     APP_PORT,
-    () => {console.log(`Server is listening on port ${APP_PORT}`)}
+    () => { console.log(`Server is listening on port ${APP_PORT}`) }
 )
