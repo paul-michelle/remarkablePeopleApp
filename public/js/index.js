@@ -1,5 +1,9 @@
-
 (async function init() {
+    await getAllNames();
+    document.getElementById('card').style.display = 'block';
+})();
+
+async function getAllNames() {
     const response = await fetch('http://localhost:3000/profile/all', {
         method: "GET",
         headers: {
@@ -10,19 +14,36 @@
     const data = await response.json();
 
     let listOfPeopleBlock = document.getElementById('allPeople');
-    
-    for (let item of data) {
-        
-        let personName = item.name;
-        let personNameSlug = personName.replaceAll(' ','+');
-        let linkToProfile=`http://localhost:3000/profile?name=${personNameSlug}`;
-        console.log(linkToProfile);
-        listOfPeopleBlock.innerHTML += `<a href=${ linkToProfile }> ${ personName } </a><br>`
-    }
-    console.log(listOfPeopleBlock);
-    document.getElementById('card').style.display = 'block';
-})();
+    listOfPeopleBlock.innerHTML = ""
 
+    for (let item of data) {
+        let personName = item.name;
+        let personNameSlug = personName.replaceAll(' ', '+');
+        let requestUri = `http://localhost:3000/profile?name=${personNameSlug}`;
+        listOfPeopleBlock.innerHTML += `<a href=javascript:getProfile("${requestUri}");> ${ personName } </a><br>`
+    }
+}
+
+async function getProfile(uriSting) {
+    const response = await fetch(uriSting);
+    const personData = await response.json();
+    document.getElementById('name').textContent = personData.name;
+    document.getElementById('country').textContent = personData.country;
+    document.getElementById('domain').textContent = personData.domain;
+    document.getElementById('achievements').textContent = personData.achievements;
+    document.getElementById('addNewButton').textContent = 'Edit';
+}
+
+function startEdittingProfile() {
+
+    document.getElementById('input-name').value = document.getElementById('name').textContent;
+    document.getElementById('input-country').value = document.getElementById('country').textContent;
+    document.getElementById('input-domain').value = document.getElementById('domain').textContent;
+    document.getElementById('input-achievements').value = document.getElementById('achievements').textContent;
+
+    document.getElementById('card').style.display = 'none';
+    document.getElementById('card-edit').style.display = 'block';
+}
 
 async function handleUpsertRequest() {
 
@@ -42,25 +63,33 @@ async function handleUpsertRequest() {
         body: JSON.stringify(updatedInfo)
     });
 
-    const jsonResponse = await response.json();
+    const upsertedInfo = await response.json();
 
-    document.getElementById('name').textContent = jsonResponse.name;
-    document.getElementById('country').textContent = jsonResponse.country;
-    document.getElementById('domain').textContent = jsonResponse.domain;
-    document.getElementById('achievements').textContent = jsonResponse.achievements;
-
+    document.getElementById('name').textContent = upsertedInfo.name;
+    document.getElementById('country').textContent = upsertedInfo.country;
+    document.getElementById('domain').textContent = upsertedInfo.domain;
+    document.getElementById('achievements').textContent = upsertedInfo.achievements;
+    document.getElementById('addNewButton').textContent = 'Edit';
 
     document.getElementById('card').style.display = 'block';
     document.getElementById('card-edit').style.display = 'none';
+
+    await getAllNames();
 }
 
-function startEdittingProfile() {
+async function handleDeleteRequest() {
+    const personName = document.getElementById('name').textContent;
 
-    document.getElementById('input-name').value = document.getElementById('name').textContent;
-    document.getElementById('input-country').value = document.getElementById('country').textContent;
-    document.getElementById('input-domain').value = document.getElementById('domain').textContent;
-    document.getElementById('input-achievements').value = document.getElementById('achievements').textContent;
+    const personNameSlug = personName.replaceAll(' ', '+');
+    const response = await fetch(`http://localhost:3000/profile?name=${personNameSlug}`, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
 
-    document.getElementById('card').style.display = 'none';
-    document.getElementById('card-edit').style.display = 'block';
+    const deletionResult = await response.json();
+    deletionResult.acknowledged ? alert('Deleteted Successfully') : alert('Deletioned Failed');
+    await getAllNames();
 }

@@ -18,6 +18,13 @@ let app = express();
 
 const crossOrigin = cors();
 app.use(crossOrigin);
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET", "PUT", "POST", "DELETE", "OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    next();
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public')));
@@ -36,7 +43,6 @@ app.get(
             if (connectionError) throw connectionError;
 
             const queryFindAll = {};
-
             client
                 .db(MONGO_DB_NAME)
                 .collection(MONGO_USERS_COLLECTION)
@@ -59,7 +65,6 @@ app.get(
             if (connectionError) throw connectionError;
 
             const queryFind = { name: req.query.name };
-
             client
                 .db(MONGO_DB_NAME)
                 .collection(MONGO_USERS_COLLECTION)
@@ -78,12 +83,10 @@ app.post(
     (req, res) => {
         MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
-            const nameOfRemarkablePerson = req.query.name;
 
             const queryMatch = { name: req.body.name };
             const querySet = { $set: req.body };
             const updateOptions = { upsert: true };
-
             client
                 .db(MONGO_DB_NAME)
                 .collection(MONGO_USERS_COLLECTION)
@@ -93,12 +96,34 @@ app.post(
                         client.close();
                         res.send(req.body);
                     }
-                )
+                );
         });
     }
 );
 
+app.delete(
+    '/profile',
+    (req, res) => {
+        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+            if (connectionError) throw connectionError;
+
+            const quertMatch = { name: req.query.name };
+            client
+                .db(MONGO_DB_NAME)
+                .collection(MONGO_USERS_COLLECTION)
+                .deleteOne(
+                    quertMatch, (deletionError, deletionResult) => {
+                        if (deletionError) throw deletionError;
+                        client.close();;
+                        res.send(deletionResult);
+                    }
+                );
+        });
+    }
+);
+
+
 app.listen(
     APP_PORT,
     () => { console.log(`Server is listening on port ${APP_PORT}`) }
-)
+);

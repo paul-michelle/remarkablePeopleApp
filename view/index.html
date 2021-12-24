@@ -28,20 +28,20 @@
                 </div>
                 <div>
                     <span>Name</span>
-                    <h3 id="name">Yury Knorozov</h3>
+                    <h3 id="name">A.N.Other</h3>
                     <hr />
                     <span>Country</span>
-                    <h3 id="country">Ukraine, Russia</h3>
+                    <h3 id="country">La-la-land</h3>
                     <hr />
                     <span>Domain</span>
-                    <h3 id="domain">History</h3>
+                    <h3 id="domain">Fine arts and Programming</h3>
                     <hr />
                     <span>Achievements</span>
-                    <h3 id="achievements">First ever to decipher Maya hieroglyphs.</h3>
+                    <h3 id="achievements">There should be some...</h3>
                     <hr />
                 </div>
                 <div>
-                    <button class="button" onclick="startEdittingProfile()">Edit</button>
+                    <button class="button" id="addNewButton" onclick="startEdittingProfile()">Add New</button>
                 </div>
             </div>
 
@@ -61,8 +61,15 @@
                 <hr />
                 <span>Achievements</span><label for="input-achievements"></label><input type="text" id="input-achievements" , value='' />
                 <hr />
-
-                <button class="button" onclick="handleUpsertRequest()">Update</button>
+                <div class="buttonsRow">
+                    <div>
+                        <button class="button" id="updateButton" onclick="handleUpsertRequest()">Update</button>
+                    </div>
+                    <div class='delCancelButtons'>
+                        <button class="button" id="deleteButton" onclick="handleDeleteRequest()">Delete</button>
+                        <button class="button" id="cancelButton" onclick="makeNoRequest()">Cancel</button>
+                    </div>
+                </div>
             </div>
 
             <div class="allPeople col-4" id="allPeople"></div>
