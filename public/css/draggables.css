@@ -1,0 +1,12 @@
+#sampledrag {
+    position: absolute;
+    z-index: 9;
+}
+
+#sampledraghead {
+    z-index: 10;
+}
+
+#sampledraghead:hover {
+    cursor: grabbing;
+}
