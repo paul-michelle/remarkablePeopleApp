@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Remarkable People</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/index.css">
 </head>
@@ -19,25 +20,23 @@
                 <div>
                     <h1>Profile</h1>
                 </div>
+                <video id='photoAlive' autoplay muted loop>
+                    <source src="/img/KnorozovAlive.mp4" type='video/mp4' alt="awesome_video_here">
+                    Should the video not be supported by your browser, here is a link.
+                    <a href="/img/KnorozovAlive.mp4">Download</a>.
+                </video>
                 <div>
-                    <video id='photoAlive' autoplay muted loop>
-                        <source src="/img/KnorozovAlive.mp4" type='video/mp4' alt="awesome_video_here">
-                        Should the video not be supported by your browser, here is a link.
-                        <a href="/img/KnorozovAlive.mp4">Download</a>. 
-                    </video>
-                </div>
-                <div>
-                    <span>Name</span>
-                    <h3 id="name">A.N.Other</h3>
+                    <span>Name</span><br>
+                    <h4 id="name">A.N.Other</h4>
                     <hr />
-                    <span>Country</span>
-                    <h3 id="country">La-la-land</h3>
+                    <span>Country</span><br>
+                    <h4 id="country">La-la-land</h4>
                     <hr />
-                    <span>Domain</span>
-                    <h3 id="domain">Fine arts and Programming</h3>
+                    <span>Domain</span><br>
+                    <h4 id="domain">Fine arts and Programming</h4>
                     <hr />
-                    <span>Achievements</span>
-                    <h3 id="achievements">There should be some...</h3>
+                    <span>Achievements</span><br>
+                    <h4 id="achievements">There should be some...</h4>
                     <hr />
                 </div>
                 <div>
@@ -47,11 +46,18 @@
 
             <div class="card col-8" id="card-edit">
                 <h1>Profile</h1>
-                <video id='photoAlive' autoplay muted loop>
-                    <source src="/img/KnorozovAlive.mp4" type='video/mp4' alt="awesome_video_here">
-                    Should the video not be supported by your browser, here is a link.
-                    <a href="/img/KnorozovAlive.mp4">Download</a>.
-                </video>
+                <div class="avatar">
+                    <form class="box" method="post" action="" enctype="multipart/form-data">
+                        <div class="box__input">
+                            <input class="box__file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+                            <label for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it here</span>.</label>
+                            <button class="box__button" type="submit">Upload</button>
+                        </div>
+                        <div class="box__uploading">Uploading…</div>
+                        <div class="box__success">Done!</div>
+                        <div class="box__error">Error! <span></span>.</div>
+                    </form>
+                </div>
 
                 <span>Name</span><label for="input-name"></label><input type="text" id="input-name" , value='' />
                 <hr />
@@ -67,7 +73,7 @@
                     </div>
                     <div class='delCancelButtons'>
                         <button class="button" id="deleteButton" onclick="handleDeleteRequest()">Delete</button>
-                        <button class="button" id="cancelButton" onclick="makeNoRequest()">Cancel</button>
+                        <button class="button" id="cancelButton" onclick="cancelEditMode()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -75,10 +81,17 @@
             <div class="allPeople col-4" id="allPeople"></div>
 
         </div>
+
+        <div class="row">
+            <div id="sampledrag">
+                <div id="sampledraghead">Drag me!</div>
+            </div>
+        </div>
+
     </div>
 
-    <script src="/js/index.js"></script>
-
+    <script src="/js/handlers.js"></script>
+    <script src="/js/draggables.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

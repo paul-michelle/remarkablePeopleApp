@@ -4,13 +4,7 @@
 })();
 
 async function getAllNames() {
-    const response = await fetch('http://localhost:3000/profile/all', {
-        method: "GET",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    });
+    const response = await fetch('http://localhost:3000/profile/all');
     const data = await response.json();
 
     let listOfPeopleBlock = document.getElementById('allPeople');
@@ -32,6 +26,9 @@ async function getProfile(uriSting) {
     document.getElementById('domain').textContent = personData.domain;
     document.getElementById('achievements').textContent = personData.achievements;
     document.getElementById('addNewButton').textContent = 'Edit';
+
+    document.getElementById('card').style.display = 'block';
+    document.getElementById('card-edit').style.display = 'none';
 }
 
 function startEdittingProfile() {

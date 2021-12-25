@@ -7,12 +7,14 @@ const MongoClient = require('mongodb').MongoClient;
 const path = require('path');
 const fileSys = require('fs');
 
-const APP_PORT = 3000;
+
 const MONGO_URI_LOCAL = process.env.MONGO_URI_LOCAL;
 const MONGO_URI_DOCKER = process.env.MONGO_URI_DOCKER;
 const MONGO_DB_NAME = 'node_mongo_docker_app';
 const MONGO_USERS_COLLECTION = 'users';
 const MONGO_CLIENT_OPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
+
+const APP_PORT = 3000;
 
 let app = express();
 
@@ -121,6 +123,7 @@ app.delete(
         });
     }
 );
+
 
 
 app.listen(
