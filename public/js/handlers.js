@@ -1,5 +1,5 @@
-async function getProfile(uriSting) {
-    const response = await fetch(uriSting);
+async function getProfile(uriString) {
+    const response = await fetch(uriString);
     const personData = await response.json();
 
     document.getElementById('name').textContent = personData.name;
@@ -68,12 +68,9 @@ async function handleDeleteRequest() {
     });
 
     const deletionResult = await response.json();
-    deletionResult.acknowledged ? alert('Deleteted Successfully') : alert('Deletioned Failed');
-
-    document.getElementById('card').style.display = 'block';
-    document.getElementById('card-edit').style.display = 'none';
-
-    document.getElementById('addNewButton').textContent = 'Add New';
-
-    await getAllNames();
+    if (deletionResult.acknowledged) {
+        await getAllNames();
+        document.getElementById('card-edit').style.display = 'none';
+        document.getElementById('card').style.display = 'block';
+    }
 }

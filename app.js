@@ -8,10 +8,9 @@ const path = require('path');
 const fileSys = require('fs');
 
 
-const MONGO_URI_LOCAL = process.env.MONGO_URI_LOCAL;
-const MONGO_URI_DOCKER = process.env.MONGO_URI_DOCKER;
-const MONGO_DB_NAME = 'node_mongo_docker_app';
-const MONGO_USERS_COLLECTION = 'users';
+const MONGO_URI_CLUSTER = process.env.MONGO_URI_CLUSTER;
+const MONGO_DB_NAME = 'remarkablePeople'
+const MONGO_USERS_COLLECTION = 'celebs';
 const MONGO_CLIENT_OPTIONS = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const APP_PORT = 3000;
@@ -41,7 +40,7 @@ app.get(
 app.get(
     '/profile/all',
     (req, res) => {
-        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+        MongoClient.connect(MONGO_URI_CLUSTER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
 
             const queryFindAll = {};
@@ -63,7 +62,7 @@ app.get(
 app.get(
     '/profile',
     (req, res) => {
-        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+        MongoClient.connect(MONGO_URI_CLUSTER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
 
             const queryFind = { name: req.query.name };
@@ -83,7 +82,7 @@ app.get(
 app.post(
     '/profile',
     (req, res) => {
-        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+        MongoClient.connect(MONGO_URI_CLUSTER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
 
             const queryMatch = { name: req.body.name };
@@ -106,7 +105,7 @@ app.post(
 app.delete(
     '/profile',
     (req, res) => {
-        MongoClient.connect(MONGO_URI_DOCKER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
+        MongoClient.connect(MONGO_URI_CLUSTER, MONGO_CLIENT_OPTIONS, (connectionError, client) => {
             if (connectionError) throw connectionError;
 
             const quertMatch = { name: req.query.name };

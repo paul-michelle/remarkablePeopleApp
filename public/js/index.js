@@ -1,5 +1,6 @@
 (async function init() {
     await getAllNames();
+    document.getElementById('card-edit').style.display = 'none'
     document.getElementById('card').style.display = 'block';
 })();
 

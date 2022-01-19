@@ -53,3 +53,12 @@
     cursor: pointer;
     transform: scale(1.05);
 }
+
+.box.is-uploading .box__input {
+    visibility: hidden;
+}
+
+.box.is-uploading .box__uploading {
+    display: block;
+    text-align: center;
+}
